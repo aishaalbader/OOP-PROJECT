@@ -1,4 +1,4 @@
-//حصة
+//حصه
 package com.mycompany.chargedparticlesimulator.data;
 
 import com.mycompany.chargedparticlesimulator.physics.SimulationState;
