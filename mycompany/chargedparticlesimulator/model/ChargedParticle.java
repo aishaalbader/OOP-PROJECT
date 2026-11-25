@@ -15,7 +15,7 @@ public class ChargedParticle extends Particle {
         super(charge, mass, initialPosition, initialVelocity);
     }
 
-    // Override the abstract method from Particle 
+    // Override the abstract method from Particle
     @Override
     public String getParticleType() {
 
