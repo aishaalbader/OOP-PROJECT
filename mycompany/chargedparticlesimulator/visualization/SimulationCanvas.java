@@ -1,4 +1,4 @@
-// عائشه
+//عائشه 
 package com.mycompany.chargedparticlesimulator.visualization;
 
 import com.mycompany.chargedparticlesimulator.model.*;
