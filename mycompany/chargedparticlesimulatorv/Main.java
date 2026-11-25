@@ -1,8 +1,6 @@
 // رغد
 package com.mycompany.chargedparticlesimulatorv;
 
-
-
 import com.mycompany.chargedparticlesimulator.gui.SimulationView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,6 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    //Initializing he main application window 
     @Override
     public void start(Stage stage) {
 
@@ -25,6 +24,7 @@ public class Main extends Application {
         stage.show();
     }
 
+    //Launch the JavaFX application
     public static void main(String[] args) {
         launch(args);
     }
