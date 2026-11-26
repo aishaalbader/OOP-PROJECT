@@ -14,14 +14,14 @@ public class CsvFileManager {
     public void saveStates(
             Path file,
             List<SimulationState> states) throws IOException {
-// Automatically closes the writer after use
+        // Automatically closes the writer after use
         try (BufferedWriter writer = Files.newBufferedWriter(file)) {
-// Write the CSV column headers
+            // Write the CSV column headers
             writer.write(
                     "Time (s),X (m),Y (m),Vx (m/s),Vy (m/s)");
 
             writer.newLine();
-// Write each simulation state in a separate row
+            // Write each simulation state in a separate row
             for (SimulationState state : states) {
 
                 writer.write(
