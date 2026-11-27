@@ -14,12 +14,15 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class SimulationController {
+    
     // View component reference
     private final SimulationView view;
+    
     // Helper utilities for validation, physics calculation, and file export
     private final InputValidator validator = new InputValidator();
     private final AnalyticalSolver solver = new AnalyticalSolver();
     private final CsvFileManager csvManager = new CsvFileManager();
+    
     // Model entities and calculated trajectory data
     private Particle particle;
     private ElectricField field;
@@ -44,9 +47,11 @@ public class SimulationController {
     // Creates and initializes the AnimationTimer for continuous frame rendering
     private void createAnimationTimer() {
         timer = new AnimationTimer() {
+            
      // Frame handling loop called on every animation tick (~60 FPS)
             @Override
             public void handle(long now) {
+                
                 // Pause check: skip execution if simulation is stopped
                 if (!running) {
                     return;
@@ -55,37 +60,30 @@ public class SimulationController {
                 if (lastFrame == 0) {
                     lastFrame = now;
                 }
-
-                double elapsed =
-                        (now - lastFrame) / 1_000_000_000.0;
-
+                // Calculate elapsed time in seconds and update accumulator with slider playback speed
+                double elapsed = (now - lastFrame) / 1_000_000_000.0;
                 lastFrame = now;
+                accumulator += elapsed * view.speedSlider.getValue();
 
-                accumulator +=
-                        elapsed * view.speedSlider.getValue();
-
+                // Advance simulation frame index using fixed timestep interval (0.025s)
                 double interval = 0.025;
-
-                while (accumulator >= interval
-                        && index < playbackStates.size() - 1) {
-
+                while (accumulator >= interval && index < playbackStates.size() - 1) {
                     index++;
                     accumulator -= interval;
                 }
-
+                // Render current particle state on the GUI
                 showCurrentState();
-
+                
+                // Stop timer loop and update status text when simulation reaches final state
                 if (index >= playbackStates.size() - 1) {
-
                     running = false;
-
-                    view.statusLabel.setText(
-                            "Simulation finished.");
+                    view.statusLabel.setText("Simulation finished.");
                 }
             }
         };
     }
-
+    
+    // Binds GUI buttons and check boxes to their corresponding controller event handlers
     private void configureActions() {
 
         view.runButton.setOnAction(e -> runSimulation());
