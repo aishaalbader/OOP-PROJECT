@@ -83,84 +83,53 @@ public class SimulationController {
         };
     }
     
-    // Binds GUI buttons and check boxes to their corresponding controller event handlers
+    // Configure and register event handlers for UI components    
     private void configureActions() {
-
+        // Register action handlers for buttons using lambda expressions
         view.runButton.setOnAction(e -> runSimulation());
         view.pauseButton.setOnAction(e -> pause());
         view.resetButton.setOnAction(e -> reset());
         view.stepButton.setOnAction(e -> singleStep());
         view.exportButton.setOnAction(e -> exportCsv());
-
-        view.gridCheck.selectedProperty().addListener(
-                (obs, oldValue, newValue) -> updateDisplayOptions());
-
-        view.fieldCheck.selectedProperty().addListener(
-                (obs, oldValue, newValue) -> updateDisplayOptions());
-
-        view.pathCheck.selectedProperty().addListener(
-                (obs, oldValue, newValue) -> updateDisplayOptions());
-
-        view.vectorsCheck.selectedProperty().addListener(
-                (obs, oldValue, newValue) -> updateDisplayOptions());
+        
+        // Register property listeners for check box selection changes
+        view.gridCheck.selectedProperty().addListener((obs, oldValue, newValue) -> updateDisplayOptions());
+        view.fieldCheck.selectedProperty().addListener((obs, oldValue, newValue) -> updateDisplayOptions());
+        view.pathCheck.selectedProperty().addListener((obs, oldValue, newValue) -> updateDisplayOptions());
+        view.vectorsCheck.selectedProperty().addListener((obs, oldValue, newValue) -> updateDisplayOptions());
     }
 
+    // Action handler to start or resume the simulation
     private void runSimulation() {
 
         // Resume the existing simulation if paused.
-        if (!playbackStates.isEmpty()
-                && index < playbackStates.size() - 1) {
-
+        if (!playbackStates.isEmpty() && index < playbackStates.size() - 1) {
             running = true;
             lastFrame = 0;
             timer.start();
-
             view.statusLabel.setText("Simulation resumed.");
-
             return;
         }
 
         try {
-            double q = validator.parseFinite(
-                    view.chargeField.getText(),
-                    "Charge", 50) * 1e-6;
-            double m = validator.parsePositive(
-                    view.massField.getText(),
-                    "Mass", 25) * 1e-16;
-            double e = validator.parseFinite(
-                    view.electricFieldField.getText(),
-                    "Electric field", 5000);
+            double q = validator.parseFinite(view.chargeField.getText(),"Charge", 50) * 1e-6;
+            double m = validator.parsePositive(view.massField.getText(),"Mass", 25) * 1e-16;
+            double e = validator.parseFinite(view.electricFieldField.getText(),"Electric field", 5000);
 
     if (e < 0) {
-        throw new InvalidSimulationInputException(
-                "Electric field cannot be negative.");
+        throw new InvalidSimulationInputException("Electric field cannot be negative.");
     }
-    
-    double gap = validator.parsePositive(
-            view.gapField.getText(),
-            "Plate gap", 10) / 100.0;
-
-    double speed = validator.parseFinite(
-            view.velocityField.getText(),
-            "Initial speed", 50) * 1e5;
+            
+    double gap = validator.parsePositive(view.gapField.getText(),"Plate gap", 10) / 100.0;
+    double speed = validator.parseFinite(view.velocityField.getText(),"Initial speed", 50) * 1e5;
 
     if (speed < 0) {
-        throw new InvalidSimulationInputException(
-                "Initial speed cannot be negative.");
+        throw new InvalidSimulationInputException("Initial speed cannot be negative.");
     }
 
-    double angle = Math.toRadians(
-            validator.parseFinite(
-                    view.angleField.getText(),
-                    "Launch angle"));
-
-    double totalTime = validator.parsePositive(
-            view.timeField.getText(),
-            "Total time") * 1e-9;
-
-    double dt = validator.parsePositive(
-            view.stepField.getText(),
-            "Time step") * 1e-9;
+    double angle = Math.toRadians(validator.parseFinite(view.angleField.getText(),"Launch angle"));
+    double totalTime = validator.parsePositive(view.timeField.getText(),"Total time") * 1e-9;
+    double dt = validator.parsePositive(view.stepField.getText(),"Time step") * 1e-9;
 
             if (dt > totalTime) {
                 throw new InvalidSimulationInputException(
