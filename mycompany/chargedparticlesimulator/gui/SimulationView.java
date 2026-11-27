@@ -12,9 +12,11 @@ import java.net.URL;
 
 public class SimulationView extends BorderPane {
 
+    // Create the canvas to display particle motion
     final SimulationCanvas canvas =
             new SimulationCanvas(850, 560);
 
+    // Text fields for entering the physical values
     final TextField chargeField = new TextField("5");
     final TextField massField = new TextField("2");
     final TextField electricFieldField = new TextField("1000");
@@ -26,21 +28,26 @@ public class SimulationView extends BorderPane {
     final TextField timeField = new TextField("100");
     final TextField stepField = new TextField("0.5");
 
+    // Allow the user to select the electric field direction
     final ComboBox<String> directionBox = new ComboBox<>();
 
+    // Slider to control the animation speed
     final Slider speedSlider = new Slider(0.25, 4, 1);
 
+    // Checkboxes to show or hide simulation elements
     final CheckBox gridCheck = new CheckBox("Show grid");
     final CheckBox fieldCheck = new CheckBox("Show electric field");
     final CheckBox pathCheck = new CheckBox("Show trajectory");
     final CheckBox vectorsCheck = new CheckBox("Show velocity vector");
 
+    // Buttons to control the simulation and export results
     final Button runButton = new Button("Run");
     final Button pauseButton = new Button("Pause");
     final Button resetButton = new Button("Reset");
     final Button stepButton = new Button("Single Step");
     final Button exportButton = new Button("Export CSV");
 
+    // Labels to display the simulation status and results
     final Label statusLabel = new Label("Ready");
 
     final Label timeValue = new Label("0 ns");
@@ -50,8 +57,10 @@ public class SimulationView extends BorderPane {
     final Label accelerationValue = new Label("(0, 0) m/s²");
     final Label voltageValue = new Label("0 V");
 
+    // Constructor to initialize the simulation interface
     public SimulationView() {
 
+        // Load the CSS file to style the interface
         URL css = getClass().getResource(
                 "/styles/dark-purple.css");
 
@@ -71,17 +80,21 @@ public class SimulationView extends BorderPane {
 
         setTop(title);
 
+        // Set the default electric field direction to Up
         directionBox.getItems().addAll("Up", "Down");
         directionBox.setValue("Up");
 
+        // Enable all visual options by default
         gridCheck.setSelected(true);
         fieldCheck.setSelected(true);
         pathCheck.setSelected(true);
         vectorsCheck.setSelected(true);
 
+        // Set the size of the simulation canvas
         canvas.setWidth(620);
         canvas.setHeight(450);
 
+        // Arrange the canvas and control panel side by side
         VBox controls = buildControls();
 
         HBox body = new HBox(12, canvas, controls);
@@ -92,9 +105,11 @@ public class SimulationView extends BorderPane {
 
         createMetricsPanel();
 
+        // Connect the interface to the simulation controller
         new SimulationController(this);
     }
 
+    // Create the control panel for user inputs and buttons
     private VBox buildControls() {
 
         VBox box = new VBox(9);
@@ -108,6 +123,7 @@ public class SimulationView extends BorderPane {
         Label heading = new Label("Experiment Controls");
         heading.setFont(Font.font(17));
 
+        // Use GridPane to organize the input fields
         GridPane inputs = new GridPane();
 
         inputs.setHgap(8);
@@ -115,6 +131,7 @@ public class SimulationView extends BorderPane {
 
         int row = 0;
 
+        // Add the physical input fields to the control panel
         addInput(inputs, row++, "Charge (μC)", chargeField);
         addInput(inputs, row++, "Mass (×10⁻¹⁶ kg)", massField);
         addInput(inputs, row++, "Field (N/C)", electricFieldField);
@@ -130,16 +147,19 @@ public class SimulationView extends BorderPane {
         Label speedLabel =
                 new Label("Animation speed");
 
+        // Display tick marks and labels on the speed slider
         speedSlider.setShowTickLabels(true);
         speedSlider.setShowTickMarks(true);
         speedSlider.setMajorTickUnit(1);
 
+        // Arrange the simulation buttons into two rows
         HBox buttons1 = new HBox(
                 6, runButton, pauseButton);
 
         HBox buttons2 = new HBox(
                 6, resetButton, stepButton);
 
+        // Add all controls to the panel
         box.getChildren().addAll(
                 heading,
                 inputs,
@@ -160,6 +180,7 @@ public class SimulationView extends BorderPane {
         return box;
     }
 
+    // Add a label and its text field to the specified row
     private void addInput(
             GridPane grid,
             int row,
@@ -173,6 +194,7 @@ public class SimulationView extends BorderPane {
         grid.add(field, 1, row);
     }
 
+    // Create a panel to display simulation results
     private void createMetricsPanel() {
 
         GridPane metrics = new GridPane();
@@ -182,6 +204,7 @@ public class SimulationView extends BorderPane {
 
         metrics.setPadding(new Insets(10, 0, 0, 0));
 
+        // Display time, position, and velocity
         metrics.addRow(
                 0,
                 new Label("Time:"),
@@ -192,6 +215,7 @@ public class SimulationView extends BorderPane {
                 velocityValue
         );
 
+        // Display force, acceleration, and potential difference
         metrics.addRow(
                 1,
                 new Label("Force:"),
@@ -202,6 +226,7 @@ public class SimulationView extends BorderPane {
                 voltageValue
         );
 
+        // Group the results and status label at the bottom
         VBox bottom = new VBox(
                 5,
                 new Separator(),
