@@ -14,49 +14,44 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class SimulationController {
-    // Reference to the GUI View component
+    // View component reference
     private final SimulationView view;
-    // Helper utilities and solvers
+    // Helper utilities for validation, physics calculation, and file export
     private final InputValidator validator = new InputValidator();
     private final AnalyticalSolver solver = new AnalyticalSolver();
     private final CsvFileManager csvManager = new CsvFileManager();
-
+    // Model entities and calculated trajectory data
     private Particle particle;
     private ElectricField field;
-
     private List<SimulationState> playbackStates =
             List.of();
 
+    // Animation loop state variables
     private int index = 0;
-
     private boolean running = false;
-
     private long lastFrame = 0;
-
     private double accumulator = 0;
-
     private AnimationTimer timer;
 
+    // Constructor: Binds the view and initializes UI action listeners &amp; timer
     public SimulationController(SimulationView view) {
-
         this.view = view;
-
         configureActions();
         updateDisplayOptions();
         createAnimationTimer();
     }
 
+    // Creates and initializes the AnimationTimer for continuous frame rendering
     private void createAnimationTimer() {
-
         timer = new AnimationTimer() {
-
+     // Frame handling loop called on every animation tick (~60 FPS)
             @Override
             public void handle(long now) {
-
+                // Pause check: skip execution if simulation is stopped
                 if (!running) {
                     return;
                 }
-
+                // Set initial timestamp reference on the first frame
                 if (lastFrame == 0) {
                     lastFrame = now;
                 }
