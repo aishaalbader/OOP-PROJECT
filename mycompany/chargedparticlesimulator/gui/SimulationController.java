@@ -1,11 +1,11 @@
 // سفانة
 package com.mycompany.chargedparticlesimulator.gui;
-
+// Project Layer Imports (MVC Architecture Components)
 import com.mycompany.chargedparticlesimulator.data.CsvFileManager;
 import com.mycompany.chargedparticlesimulator.model.*;
 import com.mycompany.chargedparticlesimulator.physics.*;
 import com.mycompany.chargedparticlesimulator.utilities.*;
-
+// JavaFX Animation &amp; GUI Utility Imports
 import javafx.animation.AnimationTimer;
 import javafx.stage.FileChooser;
 
@@ -14,17 +14,12 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class SimulationController {
-
+    // Reference to the GUI View component
     private final SimulationView view;
-
-    private final InputValidator validator =
-            new InputValidator();
-
-    private final AnalyticalSolver solver =
-            new AnalyticalSolver();
-
-    private final CsvFileManager csvManager =
-            new CsvFileManager();
+    // Helper utilities and solvers
+    private final InputValidator validator = new InputValidator();
+    private final AnalyticalSolver solver = new AnalyticalSolver();
+    private final CsvFileManager csvManager = new CsvFileManager();
 
     private Particle particle;
     private ElectricField field;
